@@ -1,28 +1,24 @@
-// # Punto de entrada del microservicio
+// backend/microservices/auth_service/index.js
 const express = require('express');
 const connectDB = require('../../shared/db/mongo');
 const User = require('./models/User');
 
 const app = express();
-connectDB();
+connectDB(); // Conectar a MongoDB
 
+// Ruta de ejemplo para crear un usuario
 app.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
-
-    try {
-        const user = new User({
-            username,
-            email,
-            password
-        });
-        await user.save();
-        res.status(201).json({message: "Usuario registrado correctamente"});
-    } catch (error) {
-        res.status(500).json({message: "Error al registrar el usuario"});
-    }
+  const { username, password, email } = req.body;
+  try {
+    const user = new User({ username, password, email });
+    await user.save();
+    res.status(201).json({ message: 'Usuario registrado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al registrar el usuario' });
+  }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Auth service running on port ${PORT}`);
 });

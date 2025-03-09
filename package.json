@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "mongoose": "^8.12.1",
-    "mysql2": "^3.13.0",
-    "pg": "^8.13.3",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.6"
-  }
-}
