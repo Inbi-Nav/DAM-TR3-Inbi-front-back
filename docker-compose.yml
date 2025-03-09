@@ -19,7 +19,7 @@ services:
     container_name: mysql_tr3
     restart: always
     ports:
-      - "3306:3306"
+      - "3307:3308"  # Cambiado a 3307 para evitar conflictos
     volumes:
       - mysql_data:/var/lib/mysql
     environment:
@@ -60,6 +60,18 @@ services:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules
     command: npm run dev
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer_tr3
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - mongodb
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql_tr3  # Conectar a MySQL por defecto
 
 volumes:
   mongodb_data:
