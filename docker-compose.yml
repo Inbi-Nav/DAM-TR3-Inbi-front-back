@@ -1,33 +1,86 @@
 version: '3.8'
 
 services:
-  mongodb:
-    image: mongo:6.0
-    container_name: mongodb_tr3
-    restart: always
-    ports:
-      - "27017:27017"
+  # Backend
+  backend:
+    build:
+      dockerfile: ./backend/Dockerfile
+      context: .
+    working_dir: /app/backend
     volumes:
-      - mongodb_data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-      MONGO_INITDB_DATABASE: dualspirit
-
-  app:
-    build: .
-    container_name: node_app_tr3
-    restart: always
-    env_file:
-      - .env
+      - ./backend:/app/backend
+      - /app/backend/node_modules
     ports:
       - "3000:3000"
     depends_on:
+      - mysql
       - mongodb
+    command: sh -c "npm install && nodemon -L app.js"
+
+  # Frontend
+  frontend:
+    image: node:18-alpine
+    working_dir: /app/frontend
     volumes:
-      - .:/app
-      - /app/node_modules
-    command: npm run dev
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    ports:
+      - "5173:3000"
+    environment:
+      - WATCHPACK_POLLING=true
+    command: sh -c "npm install && npm run dev"
+
+  # MongoDB
+  mongodb:
+    image: mongo:6.0
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongodb:/data/db
+
+  # Mongo Express (Interfaz web para MongoDB)
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongodb:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongodb
+
+  # MySQL (Base de datos relacional para Sequelize)
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: dualspirit
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldb:/var/lib/mysql:rw
+      - ./backend/shared/db/create.sql:/docker-entrypoint-initdb.d/create.sql
+      - ./backend/shared/db/inserts.sql:/docker-entrypoint-initdb.d/inserts.sql
+
+  # Adminer (Interfaz web para MySQL)
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    depends_on:
+      - mysql
 
 volumes:
-  mongodb_data:
+  mongodb:
+  mysqldb:
