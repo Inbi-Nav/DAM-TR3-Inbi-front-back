@@ -1,8 +1,13 @@
 const express = require('express');
 const connectDB = require('./shared/db/mongo');
+const sequelize = require('./shared/db/sequelize');
 const app = express();
 
 connectDB();
+
+sequelize.sync({ alter: true }).then(() => {
+  console.log('Modelos de Sequelize sincronizados');
+});
 
 app.use(express.json());
 
