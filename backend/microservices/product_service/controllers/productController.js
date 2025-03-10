@@ -1,4 +1,3 @@
-// backend/microservices/product_service/controllers/productController.js
 const { Transaction, Skin } = require('../models');
 
 const createTransaction = async (req, res) => {

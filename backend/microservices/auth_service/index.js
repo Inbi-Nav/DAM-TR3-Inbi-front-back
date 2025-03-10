@@ -1,12 +1,10 @@
-// backend/microservices/auth_service/index.js
 const express = require('express');
 const connectDB = require('../../shared/db/mongo');
 const User = require('./models/User');
 
 const app = express();
-connectDB(); // Conectar a MongoDB
+connectDB(); 
 
-// Ruta de ejemplo para crear un usuario
 app.post('/register', async (req, res) => {
   const { username, password, email } = req.body;
   try {

@@ -1,4 +1,3 @@
-// backend/microservices/product_service/models/Skin.js
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {

@@ -1,4 +1,3 @@
-// backend/microservices/auth_service/models/User.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../../shared/db/sequelize');
 

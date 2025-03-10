@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://mongodb_tr3:27017/dualspirit', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

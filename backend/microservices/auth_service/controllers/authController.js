@@ -1,4 +1,3 @@
-// backend/microservices/auth_service/controllers/authController.js
 const User = require('../models/User');
 
 const register = async (req, res) => {

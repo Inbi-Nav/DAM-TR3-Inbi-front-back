@@ -1,6 +1,5 @@
 const User = require('../models/User');
 
-// Registrar un nuevo usuario
 const registerUser = async (username, password, email) => {
   try {
     const user = new User({ username, password, email });
@@ -11,7 +10,6 @@ const registerUser = async (username, password, email) => {
   }
 };
 
-// Iniciar sesión de un usuario
 const loginUser = async (username, password) => {
   try {
     const user = await User.findOne({ username });
