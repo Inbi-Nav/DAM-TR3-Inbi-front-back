@@ -41,7 +41,7 @@ services:
       - mysql
     volumes:
       - ./backend:/app/backend
-    command: npm run dev
+    command: ["npm", "run", "dev"]
 
   frontend:
     build:
@@ -49,14 +49,11 @@ services:
       dockerfile: Dockerfile
     container_name: frontend_tr3
     restart: always
-    env_file:
-      - ./frontend/.env
     ports:
       - "3001:3000"
-    depends_on:
-      - backend
     volumes:
       - ./frontend:/app/frontend
+      - /app/frontend/node_modules
     command: npm run dev
 
   adminer:
