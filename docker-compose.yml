@@ -41,7 +41,7 @@ services:
       - mysql
     volumes:
       - ./backend:/app/backend
-    command: ["npm", "run", "dev"]
+    command: ["node", "app.js"]
 
   frontend:
     build:
@@ -50,23 +50,22 @@ services:
     container_name: frontend_tr3
     restart: always
     ports:
-      - "3001:3000"
+      - "8080:8080"
     volumes:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules
-    command: npm run dev
+    command: npm run serve
 
   adminer:
     image: adminer:latest
     container_name: adminer_tr3
     restart: always
     ports:
-      - "8080:8080"
+      - "8081:8080"
     depends_on:
       - mysql
-      - mongodb
     environment:
-      ADMINER_DEFAULT_SERVER: mysql_tr3  
+      ADMINER_DEFAULT_SERVER: mysql_tr3
 
 volumes:
   mongodb_data: {}

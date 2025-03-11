@@ -1,1 +1,0 @@
-// Middleware de autenticación

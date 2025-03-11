@@ -1,22 +1,18 @@
 const express = require('express');
-const connectDB = require('../../shared/db/mongo');
+const authRoutes = require('./routes/authRoutes');
 const User = require('./models/User');
 
-const app = express();
-connectDB(); 
-
-app.post('/register', async (req, res) => {
-  const { username, password, email } = req.body;
-  try {
-    const user = new User({ username, password, email });
-    await user.save();
-    res.status(201).json({ message: 'Usuario registrado exitosamente' });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al registrar el usuario' });
-  }
+User.sync({ force: false }).then(() => {
+  console.log('Modelo de Usuario sincronizado');
 });
 
-const PORT = process.env.PORT || 3001;
+const app = express();
+const PORT = process.env.AUTH_PORT || 3001;
+
+app.use(express.json());
+
+app.use('/auth', authRoutes);
+
 app.listen(PORT, () => {
-  console.log(`Auth service running on port ${PORT}`);
+  console.log(`Servicio de autenticación funcionando en http://localhost:${PORT}`);
 });

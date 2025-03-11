@@ -4,10 +4,10 @@ WORKDIR /app/frontend
 
 COPY package*.json ./
 
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 8080
 
-CMD ["npm", "run", "dev", "--", "--force"]
+CMD ["npm", "run", "serve"]
