@@ -1,5 +1,4 @@
 const User = require('../models/User');
-const { hashPassword } = require('../utils/authUtils');
 
 const register = async (req, res) => {
   const { username, password, email } = req.body;
@@ -9,8 +8,7 @@ const register = async (req, res) => {
   }
 
   try {
-    const hashedPassword = await hashPassword(password);
-    const user = await User.create({ username, password: hashedPassword, email });
+    const user = await User.create({ username, password, email });
 
     res.status(201).json({
       username: user.username,
