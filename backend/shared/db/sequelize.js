@@ -12,4 +12,17 @@ const sequelize = new Sequelize(
   }
 );
 
+const syncDatabase = async () => {
+  try {
+    await sequelize.sync({ force: true });
+  } catch (error) {
+    console.error('Error al sincronizar Sequelize:', error);
+  }
+};
+
+syncDatabase();
+
+sequelize.authenticate()
+  .catch(err => console.error('Error al conectar a MySQL:', err));
+
 module.exports = sequelize;

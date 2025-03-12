@@ -16,4 +16,4 @@ COPY frontend/ ./frontend/
 
 EXPOSE 3000 3001
 
-CMD ["npm", "run", "dev", "--prefix", "backend"]
+CMD ["nodemon", "--legacy-watch", "node_modules/.bin/vue-cli-service", "serve", "--host", "0.0.0.0"]

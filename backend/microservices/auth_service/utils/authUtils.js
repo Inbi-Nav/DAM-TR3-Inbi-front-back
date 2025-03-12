@@ -12,7 +12,7 @@ const comparePassword = async (password, hashedPassword) => {
 };
 
 const generateToken = (user) => {
-  return jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign({ username: user.username }, config.JWT_SECRET, { expiresIn: '1h' });
 };
 
 module.exports = { hashPassword, comparePassword, generateToken };
