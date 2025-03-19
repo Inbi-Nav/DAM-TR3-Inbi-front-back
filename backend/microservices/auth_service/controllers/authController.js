@@ -1,24 +1,23 @@
-const User = require('../models/User');
+const config = require('../../../shared/config/config');
 
-const register = async (req, res) => {
-  const { username, password, email } = req.body;
+const login = async (req, res) => {
+  const { username, password } = req.body;
 
-  if (!username || !password || !email) {
-    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+  const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Rellenar los campos obligatorios' });
   }
 
-  try {
-    const user = await User.create({ username, password, email });
-
-    res.status(201).json({
-      username: user.username,
-      password: user.password, 
-      email: user.email
+  if (username === adminUsername && password === adminPassword) {
+    return res.status(200).json({
+      message: 'Login correcto',
+      username: adminUsername
     });
-
-  } catch (error) {
-    res.status(500).json({ error: 'Error al registrar', details: error.message });
+  } else {
+    return res.status(401).json({ error: 'Credenciales incorrectas' });
   }
 };
 
-module.exports = { register };
+module.exports = { login };
