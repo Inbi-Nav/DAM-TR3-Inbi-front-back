@@ -12,9 +12,11 @@ const startServer = async () => {
     app.use(express.json());
     app.use('/auth', authRoutes);
 
-    app.listen(PORT);
+    app.listen(PORT, () => {
+      console.log(`Auth service running on port ${PORT}`);
+    });
   } catch (error) {
-    console.error('Error al sincronizar Sequelize:', error);
+    console.error('Error starting auth service:', error);
   }
 };
 

@@ -1,5 +1,7 @@
 FROM node:18-alpine
 
+RUN apk add --no-cache make gcc g++ python3
+
 WORKDIR /app/backend
 
 COPY package*.json ./
