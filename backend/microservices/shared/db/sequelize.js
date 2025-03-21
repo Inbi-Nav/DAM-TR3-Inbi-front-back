@@ -21,7 +21,7 @@ const sequelize = new Sequelize(
 
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ alter: true });
     console.log('Base de datos sincronizada correctamente');
   } catch (error) {
     console.error('Error al sincronizar Sequelize:', error);
