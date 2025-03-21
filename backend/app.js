@@ -2,6 +2,14 @@ const express = require('express');
 const authRoutes = require('./microservices/auth_service/routes/authRoutes');
 const app = express();
 const port = 3000;
+const cors = require('cors');
+
+app.use(cors({
+  origin:  'http://localhost:8080',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+}));
+
 
 app.use(express.json());
 
