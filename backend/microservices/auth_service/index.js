@@ -13,10 +13,10 @@ const startServer = async () => {
     app.use('/auth', authRoutes);
 
     app.listen(PORT, () => {
-      console.log(`Auth service running on port ${PORT}`);
+      console.log(`Auth_service correindo en puerto ${PORT}`);
     });
   } catch (error) {
-    console.error('Error starting auth service:', error);
+    console.error('Error inicuando auth_service:', error);
   }
 };
 

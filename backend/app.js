@@ -1,28 +1,23 @@
 const express = require('express');
-const authRoutes = require('./microservices/auth_service/routes/authRoutes');
+const cors = require('cors');
 const app = express();
 const port = 3000;
-const cors = require('cors');
+
+const userRoutes = require('./microservices/auth_service/routes/userRoutes');
+const adminRoutes = require('./microservices/auth_service/routes/adminRoutes');
+const sequelize = require('./shared/db/sequelize');
 
 app.use(cors({
-  origin:  'http://localhost:8080',
+  origin: '*',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
-
-
 app.use(express.json());
 
-app.get('/api/ruta-get', (req, res) => {
-  res.json({ message: 'Este es un endpoint GET' });
-});
+app.use('/users', userRoutes);
+app.use('/admins', adminRoutes);
 
-app.post('/api/ruta-post', (req, res) => {
-  const { username, password } = req.body;
-  res.json({ message: 'Este es un endpoint POST', username, password });
-});
-
-app.use('/auth', authRoutes);
+sequelize.sync();
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);

@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../shared/db/sequelize');
+const sequelize = require('../../../shared/db/sequelize');
 
 const Admin = sequelize.define('Admin', {
   username: {

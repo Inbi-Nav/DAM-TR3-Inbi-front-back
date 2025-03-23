@@ -1,5 +1,5 @@
 module.exports = {
-  lintOnSave: false, // 👈 esto desactiva ESLint
+  lintOnSave: false, 
   transpileDependencies: [],
   devServer: {
     host: '0.0.0.0',

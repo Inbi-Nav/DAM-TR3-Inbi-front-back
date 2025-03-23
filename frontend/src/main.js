@@ -15,5 +15,4 @@ const router = createRouter({
   routes
 });
 
-// Montar la aplicación solo UNA vez
 createApp(App).use(router).mount('#app');

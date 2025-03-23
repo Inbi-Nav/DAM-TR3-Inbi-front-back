@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard">
-      <h1>Bienvenido, Admin</h1>
+      <h1>DUALSPIRIT</h1>
       <p>Panel de control</p>
       <button @click="logout">Logout</button>
     </div>
