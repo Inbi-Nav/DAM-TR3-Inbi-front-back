@@ -31,7 +31,7 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post('http://localhost:3000/auth/login', {
+        const response = await axios.post('http://localhost:3000/admins/login', {
           username: this.username,
           password: this.password
         });
@@ -39,7 +39,7 @@ export default {
         alert(response.data.message);
         this.router.push('/dashboard'); 
       } catch (error) {
-        this.errorMessage = error.response?.data?.error || 'ACCESS DENIED';
+        this.errorMessage = error.response?.data?.error || 'ACCESSO DENEGADO ';
       }
     }
   }
