@@ -10,6 +10,16 @@
         <h3>{{ player.username }}</h3>
         <p>🎯 Partidas jugadas: {{ player.gamesPlayed }}</p>
         <p>📅 Registro: {{ formatDate(player.createdAt) }}</p>
+        <p :class="{ active: player.isActive, inactive: !player.isActive }">
+          {{ player.isActive ? '🟢 Activo' : '🔴 Inactivo' }}
+        </p>
+
+        <div class="buttons">
+          <button class="toggle-btn" @click="toggleActive(player.id)">
+            {{ player.isActive ? 'Desactivar' : 'Activar' }}
+          </button>
+          <button class="delete-btn" @click="deleteUser(player.id)">Eliminar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -26,24 +36,44 @@ export default {
     };
   },
   async mounted() {
-    try {
-      const response = await axios.get('http://localhost:3000/users');
-      this.players = response.data;
-    } catch (error) {
-      console.error('Error al obtener jugadores:', error);
-    }
+    await this.loadPlayers();
   },
   setup() {
     const router = useRouter();
     return { router };
   },
   methods: {
+    async loadPlayers() {
+      try {
+        const res = await axios.get('http://localhost:3000/users');
+        this.players = res.data;
+      } catch (err) {
+        console.error('Error al cargar usuarios:', err);
+      }
+    },
     volver() {
       this.router.push('/dashboard');
     },
     formatDate(dateStr) {
       const date = new Date(dateStr);
       return date.toLocaleDateString();
+    },
+    async toggleActive(id) {
+      try {
+        await axios.put(`http://localhost:3000/users/${id}/toggle-active`);
+        await this.loadPlayers();
+      } catch (err) {
+        alert('Error al cambiar estado del usuario');
+      }
+    },
+    async deleteUser(id) {
+      if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
+      try {
+        await axios.delete(`http://localhost:3000/users/${id}`);
+        await this.loadPlayers();
+      } catch (err) {
+        alert('Error al eliminar el usuario');
+      }
     }
   }
 };
@@ -85,7 +115,6 @@ h1 {
   cursor: pointer;
   transition: 0.2s;
 }
-
 .back-btn:hover {
   background: white;
   color: black;
@@ -115,9 +144,40 @@ h1 {
   font-size: 1.6rem;
   margin-bottom: 10px;
 }
-
 .player-card p {
   font-size: 1rem;
   margin: 5px 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.toggle-btn {
+  background: orange;
+  color: black;
+  border: 2px solid black;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+}
+
+.delete-btn {
+  background: red;
+  color: white;
+  border: 2px solid black;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+}
+
+.active {
+  color: #4caf50;
+}
+
+.inactive {
+  color: #f44336;
 }
 </style>
