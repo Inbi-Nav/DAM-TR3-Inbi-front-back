@@ -2,7 +2,6 @@ const express = require('express');
 const GameSettings = require('../models/GameSettings');
 const router = express.Router();
 
-// Obtener todos los ajustes
 router.get('/settings', async (req, res) => {
     try {
       const setting = await GameSettings.findOne({ where: { key: 'moveSpeed' } });
@@ -11,14 +10,13 @@ router.get('/settings', async (req, res) => {
         return res.status(404).json({ error: 'No se encontró moveSpeed' });
       }
   
-      res.json({ moveSpeed: Number(setting.value) }); // 👈 Este JSON sí funciona en Unity
+      res.json({ moveSpeed: Number(setting.value) }); 
     } catch (err) {
       res.status(500).json({ error: 'Error al obtener configuración' });
     }
   });
   
 
-// Actualizar o insertar múltiples ajustes (por compatibilidad)
 router.post('/settings', async (req, res) => {
   const updates = req.body;
   try {
@@ -31,7 +29,6 @@ router.post('/settings', async (req, res) => {
   }
 });
 
-// ✅ Actualizar un solo ajuste por clave
 router.put('/settings', async (req, res) => {
     const { moveSpeed } = req.body;
   
