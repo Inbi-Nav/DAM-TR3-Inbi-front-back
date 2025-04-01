@@ -45,7 +45,7 @@ export default {
   methods: {
     async loadPlayers() {
       try {
-        const res = await axios.get('http://localhost:3000/users');
+        const res = await axios.get('http://localhost:27775/users');
         this.players = res.data;
       } catch (err) {
         console.error('Error al cargar usuarios:', err);
@@ -60,7 +60,7 @@ export default {
     },
     async toggleActive(id) {
       try {
-        await axios.put(`http://localhost:3000/users/${id}/toggle-active`);
+        await axios.put(`http://localhost:27775/users/${id}/toggle-active`);
         await this.loadPlayers();
       } catch (err) {
         alert('Error al cambiar estado del usuario');
@@ -69,7 +69,7 @@ export default {
     async deleteUser(id) {
       if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
       try {
-        await axios.delete(`http://localhost:3000/users/${id}`);
+        await axios.delete(`http://localhost:27775/users/${id}`);
         await this.loadPlayers();
       } catch (err) {
         alert('Error al eliminar el usuario');

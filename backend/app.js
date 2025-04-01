@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 3000;
+const port = 27775;
 
 const userRoutes = require('./microservices/auth_service/routes/userRoutes');
 const adminRoutes = require('./microservices/auth_service/routes/adminRoutes');
