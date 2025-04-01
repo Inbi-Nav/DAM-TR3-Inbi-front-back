@@ -31,15 +31,15 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post('http://localhost:3000/admins/login', {
+        const response = await axios.post('http://dam.inspedralbes.cat:27775/admins/login', {
           username: this.username,
           password: this.password
         });
 
-        alert(response.data.message);
-        this.router.push('/dashboard'); 
+        this.router.push('/dashboard');  // Redirige al dashboard
+
       } catch (error) {
-        this.errorMessage = error.response?.data?.error || 'ACCESSO DENEGADO ';
+        this.errorMessage = error.response?.data?.error || 'ACCESSO DENEGADO';
       }
     }
   }
@@ -95,23 +95,22 @@ export default {
   text-shadow: 2px 2px 0px black;
   position: relative;
   z-index: 2;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
-
-
 
 input {
   display: block;
-  width: calc(100% - 20px); 
+  width: calc(100% - 20px);
   padding: 12px;
-  margin: 10px auto; 
+  margin: 10px auto;
   background: black;
   color: white;
   font-family: 'Press Start 2P', cursive;
   border: 3px solid white;
   text-align: center;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
+
 button {
   padding: 12px;
   width: 100%;
@@ -134,6 +133,7 @@ button:hover {
   margin-top: 10px;
   animation: blink 1s infinite;
 }
+
 @keyframes blink {
   0% { opacity: 1; }
   50% { opacity: 0; }

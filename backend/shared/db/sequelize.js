@@ -2,20 +2,17 @@ const { Sequelize } = require('sequelize');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
 
-console.log('Configuración de BD:', {
-  name: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST
-});
+
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  "a23inbnavnav_dualspirit",
+  "a23inbnavnav_root",
+  "Pedralbes2023",
   {
-    host: process.env.DB_HOST,
+    host: "dam.inspedralbes.cat",
     dialect: 'mysql',
     logging: false,
+
   }
 );
 
