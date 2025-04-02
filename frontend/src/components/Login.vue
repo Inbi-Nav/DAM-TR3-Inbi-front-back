@@ -36,7 +36,7 @@ export default {
           password: this.password
         });
 
-        this.router.push('/dashboard');  // Redirige al dashboard
+        this.router.push('/dashboard'); 
 
       } catch (error) {
         this.errorMessage = error.response?.data?.error || 'ACCESSO DENEGADO';

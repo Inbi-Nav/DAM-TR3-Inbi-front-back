@@ -13,14 +13,14 @@
         <p :class="{ active: player.isActive, inactive: !player.isActive }">
           {{ player.isActive ? '🟢 Activo' : '🔴 Inactivo' }}
         </p>
-
-        <div class="buttons">
-          <button class="toggle-btn" @click="toggleActive(player.id)">
-            {{ player.isActive ? 'Desactivar' : 'Activar' }}
-          </button>
-          <button class="delete-btn" @click="deleteUser(player.id)">Eliminar</button>
-        </div>
       </div>
+    </div>
+
+    <div class="speed-control">
+      <h2>⚙️ Velocidad del Jugador</h2>
+      <input type="number" v-model.number="moveSpeed" min="1" step="0.1" />
+      <button @click="updateSpeed">Actualizar Velocidad</button>
+      <p v-if="speedMessage" class="speed-message">{{ speedMessage }}</p>
     </div>
   </div>
 </template>
@@ -32,11 +32,14 @@ import { useRouter } from 'vue-router';
 export default {
   data() {
     return {
-      players: []
+      players: [],
+      moveSpeed: null,
+      speedMessage: ''
     };
   },
   async mounted() {
     await this.loadPlayers();
+    await this.loadSpeed();
   },
   setup() {
     const router = useRouter();
@@ -51,29 +54,31 @@ export default {
         console.error('Error al cargar usuarios:', err);
       }
     },
+    async loadSpeed() {
+      try {
+        const res = await axios.get('http://dam.inspedralbes.cat:27775/game/settings');
+        this.moveSpeed = res.data.moveSpeed;
+      } catch (err) {
+        console.error('Error al obtener velocidad');
+      }
+    },
+    async updateSpeed() {
+      try {
+        await axios.put('http://dam.inspedralbes.cat:27775/game/settings', {
+          moveSpeed: this.moveSpeed
+        });
+        this.speedMessage = 'Velocidad actualizada correctamente';
+        setTimeout(() => this.speedMessage = '', 3000);
+      } catch (err) {
+        this.speedMessage = ' Error al actualizar velocidad';
+      }
+    },
     volver() {
       this.router.push('/dashboard');
     },
     formatDate(dateStr) {
       const date = new Date(dateStr);
       return date.toLocaleDateString();
-    },
-    async toggleActive(id) {
-      try {
-        await axios.put(`http://dam.inspedralbes.cat:27775/users/${id}/toggle-active`);
-        await this.loadPlayers();
-      } catch (err) {
-        alert('Error al cambiar estado del usuario');
-      }
-    },
-    async deleteUser(id) {
-      if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
-      try {
-        await axios.delete(`http://dam.inspedralbes.cat:27775/users/${id}`);
-        await this.loadPlayers();
-      } catch (err) {
-        alert('Error al eliminar el usuario');
-      }
     }
   }
 };
@@ -134,12 +139,10 @@ h1 {
   border-radius: 8px;
   transition: transform 0.2s;
 }
-
 .player-card:hover {
   transform: scale(1.03);
   background: #111;
 }
-
 .player-card h3 {
   font-size: 1.6rem;
   margin-bottom: 10px;
@@ -149,35 +152,46 @@ h1 {
   margin: 5px 0;
 }
 
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.toggle-btn {
-  background: orange;
-  color: black;
-  border: 2px solid black;
-  padding: 8px 14px;
-  cursor: pointer;
-  font-family: 'VT323', monospace;
-}
-
-.delete-btn {
-  background: red;
-  color: white;
-  border: 2px solid black;
-  padding: 8px 14px;
-  cursor: pointer;
-  font-family: 'VT323', monospace;
-}
-
 .active {
   color: #4caf50;
 }
-
 .inactive {
   color: #f44336;
+}
+
+.speed-control {
+  margin-top: 40px;
+  border-top: 2px solid black;
+  padding-top: 20px;
+  text-align: center;
+  font-family: 'VT323', monospace;
+}
+
+.speed-control input {
+  padding: 8px;
+  font-size: 1.2rem;
+  margin: 10px;
+  width: 100px;
+  text-align: center;
+}
+
+.speed-control button {
+  padding: 10px 20px;
+  background: black;
+  color: white;
+  border: 2px solid white;
+  font-family: 'VT323', monospace;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.speed-control button:hover {
+  background: white;
+  color: black;
+}
+
+.speed-message {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: green;
 }
 </style>
