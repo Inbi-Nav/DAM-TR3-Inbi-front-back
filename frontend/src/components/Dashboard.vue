@@ -10,7 +10,7 @@
 
     <div class="main">
       <header class="topbar">
-        <button class="logout-btn" @click="logout">🚪 Cerrar Sesión</button>
+        <button class="logout-btn" @click="logout"> Cerrar Sesión</button>
       </header>
       <section class="content">
         <h1> 🎮 DUALSPIRIT</h1>

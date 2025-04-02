@@ -4,7 +4,6 @@ const sequelize = require('../../../shared/db/sequelize');
 const User = sequelize.define('User', {
   username: {
     type: DataTypes.STRING,
-    unique: true,
     allowNull: false
   },
   password: {
