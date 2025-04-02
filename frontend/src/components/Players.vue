@@ -13,6 +13,13 @@
         <p :class="{ active: player.isActive, inactive: !player.isActive }">
           {{ player.isActive ? '🟢 Activo' : '🔴 Inactivo' }}
         </p>
+
+        <div class="buttons">
+          <button class="toggle-btn" @click="toggleActive(player.id)">
+            {{ player.isActive ? 'Desactivar' : 'Activar' }}
+          </button>
+          <button class="delete-btn" @click="deleteUser(player.id)">Eliminar</button>
+        </div>
       </div>
     </div>
 
@@ -67,7 +74,7 @@ export default {
         await axios.put('http://dam.inspedralbes.cat:27775/game/settings', {
           moveSpeed: this.moveSpeed
         });
-        this.speedMessage = 'Velocidad actualizada correctamente';
+        this.speedMessage = ' Velocidad actualizada correctamente';
         setTimeout(() => this.speedMessage = '', 3000);
       } catch (err) {
         this.speedMessage = ' Error al actualizar velocidad';
@@ -79,6 +86,23 @@ export default {
     formatDate(dateStr) {
       const date = new Date(dateStr);
       return date.toLocaleDateString();
+    },
+    async toggleActive(id) {
+      try {
+        await axios.put(`http://dam.inspedralbes.cat:27775/users/${id}/toggle-active`);
+        await this.loadPlayers();
+      } catch (err) {
+        alert('Error al cambiar estado del usuario');
+      }
+    },
+    async deleteUser(id) {
+      if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
+      try {
+        await axios.delete(`http://dam.inspedralbes.cat:27775/users/${id}`);
+        await this.loadPlayers();
+      } catch (err) {
+        alert('Error al eliminar el usuario');
+      }
     }
   }
 };
@@ -152,6 +176,28 @@ h1 {
   margin: 5px 0;
 }
 
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.toggle-btn {
+  background: orange;
+  color: black;
+  border: 2px solid black;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+}
+.delete-btn {
+  background: red;
+  color: white;
+  border: 2px solid black;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+}
 .active {
   color: #4caf50;
 }

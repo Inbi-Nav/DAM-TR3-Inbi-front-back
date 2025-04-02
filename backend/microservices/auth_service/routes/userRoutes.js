@@ -1,20 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-const ServiceStatus = require('../../service_manager/models/ServiceStatus');
 
 const router = express.Router();
 
-const isServiceEnabled = async (name) => {
-  const service = await ServiceStatus.findOne({ name });
-  return service ? service.enabled : true;
-};
-
 router.post('/unity-register', async (req, res) => {
-  if (!(await isServiceEnabled('register'))) {
-    return res.status(403).json({ error: 'Registro deshabilitado temporalmente' });
-  }
-
   const { username, password } = req.body;
 
   try {
@@ -27,10 +17,6 @@ router.post('/unity-register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  if (!(await isServiceEnabled('login'))) {
-    return res.status(403).json({ error: 'Login deshabilitado temporalmente' });
-  }
-
   const { username, password } = req.body;
   const user = await User.findOne({ where: { username } });
 
@@ -72,6 +58,7 @@ router.get('/:id/status', async (req, res) => {
   }
 });
 
+
 router.get('/', async (req, res) => {
   const users = await User.findAll();
   res.json(users);
@@ -101,7 +88,6 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar usuario' });
   }
 });
-
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
@@ -115,5 +101,6 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener usuario' });
   }
 });
+
 
 module.exports = router;
