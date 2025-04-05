@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
 
 const logSchema = new mongoose.Schema({
-  type: String,             
-  message: String,
-  userId: Number,          
-  timestamp: {
-    type: Date,
-    default: Date.now
-  }
+  timestamp: { type: Date, required: true },
+  type: { type: String, required: true },
+  message: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Log', logSchema);

@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from sqlalchemy import create_engine
 from matplotlib.ticker import MaxNLocator
 from datetime import datetime
+import requests
+import json
 
 engine = create_engine("mysql+pymysql://a23inbnavnav_root:Pedralbes2023@dam.inspedralbes.cat/a23inbnavnav_dualspirit")
 
@@ -36,10 +38,8 @@ for bar in bars:
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 image_name = f"grafico_rangos_{timestamp}.png"
 image_path = os.path.join(output_dir, image_name)
-
 plt.savefig(image_path)
 plt.close()
-
 print(f"Gráfico creado: {image_path}")
 
 log_message = f"[{datetime.now().isoformat()}] [ESTADISTICA] Estadística generada: {image_name} con datos → Novato: {ranks['Novato']}, Activo: {ranks['Jugador Activo']}, Leyenda: {ranks['Leyenda']}\n"
@@ -50,3 +50,18 @@ try:
     print("Log guardado en logs.txt")
 except Exception as e:
     print(f"Error al guardar log en archivo: {e}")
+
+mongo_payload = {
+    "timestamp": datetime.now().isoformat(),
+    "type": "ESTADISTICA",
+    "message": f"Estadística generada: {image_name} con datos → Novato: {ranks['Novato']}, Activo: {ranks['Jugador Activo']}, Leyenda: {ranks['Leyenda']}"
+}
+
+try:
+    response = requests.post("http://localhost:27775/logs", json=mongo_payload, timeout=5)
+    if response.status_code == 201:
+        print("Log guardado en MongoDB")
+    else:
+        print(f"Error al guardar en MongoDB: {response.status_code} → {response.text}")
+except Exception as e:
+    print(f"Excepción al enviar log a MongoDB: {e}")

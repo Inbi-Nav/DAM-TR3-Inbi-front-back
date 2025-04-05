@@ -21,6 +21,9 @@ const userRoutes = require('./microservices/auth_service/routes/userRoutes');
 const adminRoutes = require('./microservices/auth_service/routes/adminRoutes');
 const gameRoutes = require('./microservices/auth_service/routes/gameRoutes');
 const logRoutes = require('./microservices/log_service/routes/logRoutes');
+const connectDB = require('./shared/db/mongo');
+connectDB();
+
 
 app.use('/users', userRoutes);
 app.use('/admins', adminRoutes);
